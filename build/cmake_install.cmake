@@ -131,6 +131,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/isaac/uav_ws/build/gtest/cmake_install.cmake")
+  include("/home/isaac/uav_ws/build/uav_circle/cmake_install.cmake")
 
 endif()
 
