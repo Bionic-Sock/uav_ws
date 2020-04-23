@@ -285,6 +285,19 @@ gtest/fast:
 .PHONY : gtest/fast
 
 #=============================================================================
+# Target rules for targets named uav_circle_node
+
+# Build rule for target.
+uav_circle_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 uav_circle_node
+.PHONY : uav_circle_node
+
+# fast build rule for target.
+uav_circle_node/fast:
+	$(MAKE) -f uav_circle/CMakeFiles/uav_circle_node.dir/build.make uav_circle/CMakeFiles/uav_circle_node.dir/build
+.PHONY : uav_circle_node/fast
+
+#=============================================================================
 # Target rules for targets named nav_msgs_generate_messages_nodejs
 
 # Build rule for target.
@@ -1502,6 +1515,7 @@ help:
 	@echo "... gmock"
 	@echo "... gtest_main"
 	@echo "... gtest"
+	@echo "... uav_circle_node"
 	@echo "... nav_msgs_generate_messages_nodejs"
 	@echo "... nav_msgs_generate_messages_lisp"
 	@echo "... mavros_msgs_generate_messages_py"
