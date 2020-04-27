@@ -9,8 +9,11 @@ void state_cb(const mavros_msgs::State::ConstPtr& msg){
     current_state = *msg;
 }
 
+
+
 int main(int argc, char **argv)
-{
+{   
+    int s;
     ros::init(argc, argv, "offb_node");
     ros::NodeHandle nh;
 
@@ -32,17 +35,8 @@ int main(int argc, char **argv)
         rate.sleep();
     }
 
-    geometry_msgs::PoseStamped pose;
-    pose.pose.position.x = 0;
-    pose.pose.position.y = 0;
-    pose.pose.position.z = 2;
 
-    //send a few setpoints before starting
-    for(int i = 100; ros::ok() && i > 0; --i){
-        local_pos_pub.publish(pose);
-        ros::spinOnce();
-        rate.sleep();
-    }
+
 
     mavros_msgs::SetMode offb_set_mode;
     offb_set_mode.request.custom_mode = "OFFBOARD";
@@ -50,9 +44,11 @@ int main(int argc, char **argv)
     mavros_msgs::CommandBool arm_cmd;
     arm_cmd.request.value = true;
 
+    geometry_msgs::PoseStamped pose;
+
     ros::Time last_request = ros::Time::now();
 
-    while(ros::ok()){
+    while(ros::ok() && !current_state.armed){
         if( current_state.mode != "OFFBOARD" &&
             (ros::Time::now() - last_request > ros::Duration(5.0))){
             if( set_mode_client.call(offb_set_mode) &&
@@ -72,10 +68,66 @@ int main(int argc, char **argv)
         }
 
         local_pos_pub.publish(pose);
+        ros::spinOnce();
+        rate.sleep();
+    }
+
+    
+    // Takeoff to an altitude of 2 meters with 10 second timer
+    ROS_INFO("Takeoff initiatied...");
+    for( int i = 100; i > 0; --i ){
+        
+        pose.pose.position.x = 0;
+        pose.pose.position.y = 0;
+        pose.pose.position.z = 2;
+        local_pos_pub.publish(pose);
+        
+        s = 1;
 
         ros::spinOnce();
         rate.sleep();
     }
 
-    return 0;
+    // while(ros::ok() && current_state.connected)
+
+    // First setpoint
+    if(s == 1){
+
+        pose.pose.position.x = 0;
+        pose.pose.position.y = 4;
+        pose.pose.position.z = 2;
+        ROS_INFO("Going to first setpoint...");
+        s = 2;
+
+        for( int i = 100; i > 0; --i){
+
+
+            local_pos_pub.publish(pose);
+            ros::spinOnce();
+            rate.sleep();
+        }
+    }
+
+    if(s == 2){
+        pose.pose.position.x = 4;
+        pose.pose.position.y = 0;
+        pose.pose.position.z = 2;
+        ROS_INFO("Going to second setpoint...");
+
+        for( int i = 100; i > 0; --i){
+
+
+            local_pos_pub.publish(pose);
+            ros::spinOnce();
+            rate.sleep();
+        }
+    }
+
+
+// mavros_msgs::CommandTOL land_cmd;
+// land_cmd.request.yaw = 0;
+// land_cmd.request.latitude = 0;
+// land_cmd.request.longitude = 0;
+// land_cmd.request.altitude = 0;
+    
 }
