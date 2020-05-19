@@ -8,4 +8,4 @@
 
 # modified environment variables
 export PWD="/home/isaac/uav_ws/build"
-export ROS_PACKAGE_PATH="/home/isaac/uav_ws/src:/opt/ros/melodic/share"
+export ROS_PACKAGE_PATH="/home/isaac/catkin_ws/src/avoidance/avoidance:/home/isaac/catkin_ws/src/avoidance/global_planner:/home/isaac/catkin_ws/src/avoidance/local_planner:/home/isaac/catkin_ws/src/avoidance/safe_landing_planner:/home/isaac/uav_ws/src:/opt/ros/melodic/share"

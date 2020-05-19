@@ -3,6 +3,6 @@ prefix=/home/isaac/uav_ws/install
 Name: uav_circle
 Description: Description of uav_circle
 Version: 0.0.0
-Cflags: -I${prefix}/include
+Cflags: 
 Libs: -L${prefix}/lib -luav_circle
 Requires: gazebo_msgs gazebo_ros geometry_msgs mavros mavros_msgs nav_msgs roscpp rospy sensor_msgs std_msgs tf
